@@ -21,21 +21,1310 @@ function main(event) {
    
   return new Response(`
     <!DOCTYPE html>
-    <html lang="en">
-    <head>
-      <meta charset="UTF-8">
-      <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <title>Hello World</title>
-      <script>
-        ${htmx}
-      </script>
-    </head>
-    <body>
-      <h1>Hello World</h1>
-      <button hx-get="/messages" hx-target="#message">Load Message</button>
-      <p id="message"></p>
-    </body>
-    </html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- Google Font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Audiowide&family=Saira:ital,wght@0,100..900;1,100..900&display=swap"
+    rel="stylesheet" />
+
+  <!-- Feather Icon -->
+  <script src="https://unpkg.com/feather-icons"></script>
+
+  <!-- AOS -->
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
+
+
+  <title>Space Web</title>
+  <style>
+    :root {
+      --primary: #82c8e5;
+      --secondary: #3b8ab5;
+      --dark: #0c0c0c;
+      --black: #000000;
+      --white: #fffafa;
+      --bone: #f2eadb;
+      --gray: #7a7a7a;
+      --darkgray: #262626;
+      --lightgray: #a4a4a4;
+      --aud: "Audiowide", sans-serif;
+    }
+
+    * {
+      padding: 0;
+      margin: 0;
+      box-sizing: border-box;
+    }
+
+    ::-webkit-scrollbar {
+      width: 5px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background-color: var(--white);
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background-color: var(--black);
+      color: var(--white);
+      font-family: "Inter", sans-serif;
+    }
+
+    .container {
+      width: 100%;
+      margin-right: auto;
+      margin-left: auto;
+      padding: 0 6rem;
+    }
+
+    header.aos-init.aos-animate.hidden {
+      transform: translateY(-100%);
+    }
+
+    .to-top {
+      cursor: pointer;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      padding: 12px;
+      border: 2px solid #fff;
+      border-radius: 50%;
+      color: #fff;
+      transform: scale(0);
+      z-index: 99;
+      transition: all .2s linear;
+    }
+
+    .to-top:hover {
+      background-color: #fff;
+      color: #060606;
+      transition: all .2s linear;
+    }
+
+    .to-top.active {
+      transform: scale(1);
+      transition: all .2s linear;
+    }
+
+    header {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      height: 10vh;
+      mix-blend-mode: difference;
+      z-index: 9999;
+      transition: transform 0.3s ease-in-out;
+    }
+
+    header.aos-init.aos-animate.hidden {
+      transform: translateY(-100%);
+    }
+
+    header .container .content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    header .container .content .logo {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    header .container .content .logo img {
+      width: 100px;
+    }
+
+    header .container .content .logo a {
+      font: bold 1.2rem "Audiowide", sans-serif;
+      text-decoration: none;
+      color: var(--white);
+    }
+
+    header .container .content .extra-nav {
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+    }
+
+    header .container .content .extra-nav button {
+      cursor: pointer;
+      padding: 10px;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      background-color: var(--darkgray);
+      border: 2px solid var(--gray);
+      color: var(--white);
+      width: 150px;
+      border-radius: 8px;
+    }
+
+    header .container .content .extra-nav button:hover {
+      background: var(--gray);
+      transition: .1s linear;
+    }
+
+    header .container .content .extra-nav button .icon {
+      padding: 4px;
+      display: block;
+      background: var(--gray);
+      border-radius: 4px;
+      transition: .1s linear;
+    }
+
+    header .container .content .extra-nav button:hover .icon {
+      background: var(--lightgray);
+      transition: .1s linear;
+    }
+
+    .hero {
+      position: relative;
+      min-height: 100vh;
+      background: url("https://github.com/aditya-ghosh2992/photo/blob/main/assets/bg.jpeg?raw=true");
+      background-size: cover;
+      background-position: center;
+      overflow: hidden;
+    }
+
+    .hero::after {
+      content: "";
+      display: block;
+      position: absolute;
+      width: 100%;
+      height: 30%;
+      bottom: 0;
+      background: linear-gradient(0deg,
+          rgba(1, 1, 3, 1) 8%,
+          rgba(255, 255, 255, 0) 50%);
+    }
+
+    .hero .container .content {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .hero .container .content .text {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: .5rem;
+      margin-bottom: 23%;
+      z-index: 10;
+    }
+
+    .hero .container .content .text h1 {
+      font-size: 3.5rem;
+      font-weight: bolder;
+      text-transform: uppercase;
+      font-family: var(--aud);
+      animation: textGlow 2s linear forwards;
+    }
+
+    .hero .container .content .text p {
+      font-weight: 600;
+      text-align: center;
+      width: 53%;
+      font-size: 1.2rem;
+      margin-bottom: 1rem;
+      color: var(--lightgray);
+    }
+
+    .hero .container .content .text p span {
+      font-weight: bold;
+      font-style: italic;
+      animation: color 1s linear forwards;
+    }
+
+    .hero .container .content .text a {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      text-decoration: none;
+      color: var(--white);
+      font-weight: bold;
+      padding: 8px;
+      border-bottom: 2px solid var(--white);
+      border-top: 2px solid var(--gray);
+      width: 12.5%;
+      background: var(--darkgray);
+      border-radius: 32px;
+      transition: .5s linear;
+    }
+
+    .hero .container .content .text a:active {
+      border: 2px solid transparent;
+      transform: translateY(2px);
+      transition: .1s linear;
+    }
+
+    .hero .container .content .moon {
+      position: absolute;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      bottom: -80%;
+      width: 70em;
+      height: 70em;
+      background-image: url("https://github.com/aditya-ghosh2992/photo/blob/main/assets/moon.jpg?raw=true");
+      background-size: 200% 100%;
+      border-radius: 50%;
+      filter: brightness(75%);
+      box-shadow: inset 8em -8em 8em 8em #000, 2.5em -.5em 4em #fff;
+      animation: up .8s linear, rotate 90s linear infinite;
+    }
+
+    @keyframes color {
+      to {
+        color: var(--white);
+      }
+    }
+
+    @keyframes up {
+      from {
+        bottom: -100%;
+      }
+    }
+
+    @keyframes textGlow {
+      to {
+        text-shadow: 0 0 1px #fff, 0 0 3px #fff, 0 0 6px #fff;
+      }
+    }
+
+    @keyframes rotate {
+      to {
+        background-position: -200% 0;
+      }
+    }
+
+    .why-us {
+      min-height: 100vh;
+    }
+
+    .why-us .container .content {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 1rem;
+      height: 100vh;
+    }
+
+    .why-us .container .content .title {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      gap: .5rem;
+      margin-bottom: 4rem;
+    }
+
+    .why-us .container .content .title h2 {
+      font: bold 1.5rem var(--aud);
+      color: var(--lightgray);
+    }
+
+    .why-us .container .content .title h1 {
+      font: bold 2.5rem var(--aud);
+    }
+
+    .why-us .container .content .title p {
+      width: 45%;
+      color: var(--lightgray);
+    }
+
+    .why-us .container .content .reason {
+      display: flex;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+
+    .why-us .container .content .reason .card {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 2rem;
+      width: 30%;
+      height: 350px;
+      padding: 1rem;
+      background-color: var(--dark);
+      border: 2px solid var(--darkgray);
+      border-radius: 32px;
+      overflow: hidden;
+    }
+
+    .why-us .container .content .reason .card .icon {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 65px;
+      height: 65px;
+      border-radius: 8px;
+      font-size: 1.5rem;
+      background: var(--darkgray);
+    }
+
+    .why-us .container .content .reason .card .desc {
+      text-align: center;
+      height: 40%;
+      width: 75%;
+    }
+
+    .why-us .container .content .reason .card .desc h3 {
+      font-weight: bold;
+      margin-bottom: 1rem;
+    }
+
+    .why-us .container .content .reason .card .desc p {
+      color: var(--lightgray);
+    }
+
+    .why-us .container .content .reason .card hr {
+      position: absolute;
+      top: -100%;
+      left: -150%;
+      width: 350%;
+      height: 15px;
+      transform: rotate(-40deg);
+      border: none;
+      padding: 10px;
+      background: var(--white);
+      box-shadow: 0 0 5px #ffffff, 0 0 10px #ffffff, 0 0 20px #ffffff;
+    }
+
+    .why-us .container .content .reason .card:hover hr {
+      top: 100%;
+      left: 100%;
+      transition: .3s linear;
+    }
+
+    .about {
+      min-height: 100vh;
+      background: url("https://github.com/aditya-ghosh2992/photo/blob/main/assets/about.jpeg?raw=true");
+      background-size: cover;
+      overflow: hidden;
+    }
+
+    .about .container .content {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: end;
+      height: 100vh;
+    }
+
+    .about .container .content .text-action {
+      width: 40%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 1rem;
+    }
+
+    .about .container .content h2 {
+      font: bold 1.5rem var(--aud);
+      color: var(--lightgray);
+
+    }
+
+    .about .container .content h1 {
+      font: bold 2.5rem var(--aud);
+    }
+
+    .about .container .content p {
+      font-size: 1.2rem;
+      font-weight: 600;
+    }
+
+    .about .container .content a {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 1rem;
+      padding: 10px;
+      border-radius: 32px;
+      text-decoration: none;
+      color: var(--white);
+      font-weight: bold;
+      background: var(--darkgray);
+      border: 2px solid var(--gray);
+      width: 25%;
+    }
+
+    .about .container .content a .icon {
+      padding: 4px;
+      background: var(--white);
+      color: var(--black);
+      border-radius: 50%;
+    }
+
+    .status {
+      min-height: 100vh;
+      overflow: hidden;
+    }
+
+    .status .container .content {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 3rem;
+      height: 100vh;
+    }
+
+    .status .container .content .title {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: .5rem;
+    }
+
+    .status .container .content .title h2 {
+      font: bold 2.5rem var(--aud);
+    }
+
+    .status .container .content .title p {
+      font-size: 1.2rem;
+      font-weight: 600;
+      width: 75%;
+      color: var(--lightgray);
+      text-align: center;
+    }
+
+    .status .container .content .planet {
+      position: relative;
+    }
+
+    .status .container .content .planet .earth {
+      position: relative;
+      width: 35em;
+      height: 35em;
+      background-image: url("https://github.com/aditya-ghosh2992/photo/blob/main/assets/earth.jpg?raw=true");
+      background-size: 200% 100%;
+      background-repeat: repeat;
+      border-radius: 50%;
+      box-shadow: inset -2em -2em 2em #000, -0.5em -0.5em 1em #375673;
+      animation: rotate 30s linear infinite;
+    }
+
+    .status .container .content .planet .earth .moon {
+      position: absolute;
+      left: -11em;
+      top: 50%;
+      display: flex;
+      justify-content: center;
+      transform: translateY(-50%);
+      width: 6em;
+      height: 6em;
+      background-image: url("https://github.com/aditya-ghosh2992/photo/blob/main/assets/moon.jpg?raw=true");
+      background-size: 200% 100%;
+      background-repeat: repeat;
+      border-radius: 50%;
+      box-shadow: inset -1.5em -1.5em 1.5em #000, -0.2em -0.2em 0.5em #ccc;
+      animation: rotate 30s linear infinite, orbit 20s infinite ease-in-out;
+    }
+
+    .status .container .content .planet .earth .moon .moon-desc {
+      position: absolute;
+      top: -100%;
+      width: 250px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .status .container .content .planet .earth .moon .moon-desc hr {
+      background: linear-gradient(rgba(0, 0, 0, 0.1), #fff);
+      padding: 2px;
+      width: 2px;
+      height: 100px;
+      border-radius: 8px;
+      border: none;
+    }
+
+    .status .container .content .planet .earth .moon .moon-desc p {
+      font: bold 1.2rem "Audiowide", sans-serif;
+    }
+
+    .status .container .content .planet .desc {
+      position: absolute;
+      display: flex;
+      flex-direction: column;
+      width: 90%;
+      gap: .5rem;
+      transform: translate(-50%, -50%);
+    }
+
+    .status .container .content .planet .desc:nth-child(5),
+    .status .container .content .planet .desc:nth-child(6),
+    .status .container .content .planet .desc:nth-child(7),
+    .status .container .content .planet .desc:nth-child(8) {
+      align-items: end;
+    }
+
+    .status .container .content .planet .desc hr {
+      background: linear-gradient(120deg, rgba(0, 0, 0, 0.1), #fff);
+      padding: 2px;
+      border-radius: 8px;
+      width: 100%;
+      border: none;
+    }
+
+    .status .container .content .planet .desc:nth-child(5) hr,
+    .status .container .content .planet .desc:nth-child(6) hr,
+    .status .container .content .planet .desc:nth-child(7) hr {
+      background: linear-gradient(120deg, #fff, rgba(0, 0, 0, 0.1));
+
+    }
+
+    .status .container .content .planet .desc .name {
+      font: bold 1.2rem "Audiowide", sans-serif;
+      color: var(--lightgray);
+    }
+
+    .status .container .content .planet .desc .value {
+      font-weight: 600;
+    }
+
+    .status .container .content .planet .desc-1 {
+      top: 7%;
+      left: -20%;
+    }
+
+    .status .container .content .planet .desc-2 {
+      top: 40%;
+      left: -30%;
+    }
+
+    .status .container .content .planet .desc-3 {
+      top: 75%;
+      left: -20%;
+    }
+
+    .status .container .content .planet .desc-4 {
+      top: 7%;
+      right: -110%;
+    }
+
+    .status .container .content .planet .desc-5 {
+      top: 40%;
+      right: -120%;
+    }
+
+    .status .container .content .planet .desc-6 {
+      top: 75%;
+      right: -110%;
+    }
+
+    .destination {
+      min-height: 100vh;
+      padding: 4rem 0;
+      overflow: hidden;
+    }
+
+    .destination .container .content {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      grid-template-rows: repeat(8, 1fr);
+      gap: 2rem;
+      height: 100vh;
+    }
+
+    .destination .container .content .title {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: .5rem;
+    }
+
+    .destination .container .content .title h1 {
+      font: 400 3rem "Audiowide", sans-serif;
+      letter-spacing: .3em;
+    }
+
+    .destination .container .content .title p {
+      font-size: 1.1rem;
+      color: var(--lightgray);
+    }
+
+    .destination .container .content .title a {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 1rem;
+      text-decoration: none;
+      color: var(--white);
+      font-size: .8rem;
+      padding: 4px;
+      border: 2px solid var(--lightgray);
+      border-radius: 12px;
+      background-color: transparent;
+      backdrop-filter: blur(2px);
+      width: 20%;
+    }
+
+    .destination .container .content .title a:hover {
+      background-color: var(--darkgray);
+    }
+
+    .destination .container .content .items {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 1.5rem;
+      background-size: cover;
+      background-position: center;
+      border: 2px solid var(--darkgray);
+      border-radius: 32px;
+    }
+
+    .destination .container .content .items a {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 1rem;
+      text-decoration: none;
+      color: var(--white);
+      font-size: .8rem;
+      padding: 4px;
+      border: 2px solid var(--lightgray);
+      border-radius: 12px;
+      background-color: transparent;
+      backdrop-filter: blur(2px);
+      width: 125px;
+    }
+
+    .destination .container .content .items a:hover {
+      background-color: var(--darkgray);
+    }
+
+    .destination .container .content .items a .icon {
+      width: 16px;
+    }
+
+    .destination .container .content .items h1 {
+      font: italic bold 1.5rem "Audiowide", sans-serif;
+    }
+
+    .destination .container .content .title {
+      grid-column: span 2 / span 2;
+      grid-row: span 2 / span 2;
+    }
+
+    .destination .container .content .saturn {
+      grid-column: span 2 / span 2;
+      grid-row: span 2 / span 2;
+      grid-column-start: 3;
+      background: url("https://github.com/aditya-ghosh2992/photo/blob/main/assets/saturn.jpeg?raw=true");
+    }
+
+    .destination .container .content .moon {
+      grid-column: span 2 / span 2;
+      grid-row: span 2 / span 2;
+      grid-column-start: 1;
+      grid-row-start: 3;
+      padding: 1rem;
+      background: url("https://github.com/aditya-ghosh2992/photo/blob/main/assets/moon.jpeg?raw=true");
+      background-size: cover;
+      background-position: center;
+      border: 2px solid var(--darkgray);
+      border-radius: 32px;
+    }
+
+    .destination .container .content .eyropa {
+      grid-row: span 2 / span 2;
+      grid-column-start: 3;
+      grid-row-start: 3;
+      padding: 1rem;
+      background: url("https://github.com/aditya-ghosh2992/photo/blob/main/assets/eyropa.jpeg?raw=true");
+      background-size: cover;
+      background-position: center;
+      border: 2px solid var(--darkgray);
+      border-radius: 32px;
+    }
+
+    .destination .container .content .mercury {
+      grid-row: span 2 / span 2;
+      grid-column-start: 4;
+      grid-row-start: 3;
+      padding: 1rem;
+      background: url("https://github.com/aditya-ghosh2992/photo/blob/main/assets/mercury.jpeg?raw=true");
+      background-size: cover;
+      background-position: center;
+      border: 2px solid var(--darkgray);
+      border-radius: 32px;
+    }
+
+    .destination .container .content .blackhole {
+      grid-column: span 2 / span 2;
+      grid-row: span 4 / span 4;
+      grid-column-start: 1;
+      grid-row-start: 5;
+      padding: 1rem;
+      background: url("https://github.com/aditya-ghosh2992/photo/blob/main/assets/blackhole.jpeg?raw=true");
+      background-size: cover;
+      background-position: center;
+      border: 2px solid var(--darkgray);
+      border-radius: 32px;
+    }
+
+    .destination .container .content .titan {
+      grid-row: span 2 / span 2;
+      grid-column-start: 3;
+      grid-row-start: 5;
+      padding: 1rem;
+      background: url("https://github.com/aditya-ghosh2992/photo/blob/main/assets/titan.jpeg?raw=true");
+      background-size: cover;
+      background-position: center;
+      border: 2px solid var(--darkgray);
+      border-radius: 32px;
+    }
+
+    .destination .container .content .neptune {
+      grid-row: span 2 / span 2;
+      grid-column-start: 4;
+      grid-row-start: 5;
+      padding: 1rem;
+      background: url("https://github.com/aditya-ghosh2992/photo/blob/main/assets/neptune.jpeg?raw=true");
+      background-size: cover;
+      background-position: center;
+      border: 2px solid var(--darkgray);
+      border-radius: 32px;
+    }
+
+    .destination .container .content .mars {
+      grid-column: span 2 / span 2;
+      grid-row: span 2 / span 2;
+      grid-column-start: 3;
+      grid-row-start: 7;
+      padding: 1rem;
+      background: url("https://github.com/aditya-ghosh2992/photo/blob/main/assets/mars.jpeg?raw=true");
+      background-size: cover;
+      background-position: center;
+      border: 2px solid var(--darkgray);
+      border-radius: 32px;
+    }
+
+    .contact {
+      position: relative;
+      padding: 4rem 0;
+      background: url("https://github.com/aditya-ghosh2992/photo/blob/main/assets/contact.jpeg?raw=true ");
+      background-size: cover;
+      background-position: center;
+      min-height: 80vh;
+    }
+
+    .contact::after {
+      content: "";
+      display: block;
+      position: absolute;
+      width: 100%;
+      height: 30%;
+      bottom: 0;
+      background: linear-gradient(0deg,
+          rgba(1, 1, 3, 1) 8%,
+          rgba(255, 255, 255, 0) 50%);
+    }
+
+    .contact .container .content {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      height: 80vh;
+      overflow: hidden;
+    }
+
+    .contact .container .content .left-side {
+      width: 50%;
+      display: flex;
+      flex-direction: column;
+      gap: 4rem;
+    }
+
+    .contact .container .content .left-side h1 {
+      font: 400 3rem "Audiowide", sans-serif;
+      letter-spacing: .3em;
+    }
+
+    .contact .container .content .left-side p {
+      font-size: 1.2rem;
+      color: var(--white);
+    }
+
+    .contact .container .content .right-side {
+      width: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .contact .container .content .right-side form {
+      padding: 5rem;
+      background-color: rgba(255, 255, 255, .1);
+      backdrop-filter: blur(20px);
+      border-radius: 32px;
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+      z-index: 50;
+    }
+
+    .contact .container .content .right-side form h1 {
+      font: 300 2.5rem "Audiowide", sans-serif;
+    }
+
+    .contact .container .content .right-side form .row-1,
+    .contact .container .content .right-side form .row-2 {
+      display: flex;
+      justify-content: space-between;
+      gap: 2rem;
+    }
+
+    .contact .container .content .right-side form .row-1 input,
+    .contact .container .content .right-side form .row-2 input {
+      background: transparent;
+      border: none;
+      border-bottom: 2px solid var(--white);
+      width: 50%;
+      outline: none;
+      color: var(--white);
+      font-size: 1.1rem;
+      font-weight: 500;
+    }
+
+    .contact .container .content .right-side form .row-1 input::placeholder,
+    .contact .container .content .right-side form .row-2 input::placeholder {
+      color: var(--white);
+    }
+
+    .contact .container .content .right-side form textarea {
+      resize: none;
+      background: transparent;
+      border: none;
+      border-bottom: 2px solid var(--white);
+      outline: none;
+      color: var(--white);
+      font-size: 1.1rem;
+      font-weight: 500;
+    }
+
+    .contact .container .content .right-side form textarea::placeholder {
+      color: var(--white);
+    }
+
+    .contact .container .content .right-side form .remember {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .contact .container .content .right-side form .remember p {
+      font-size: 1.1rem;
+    }
+
+    .contact .container .content .right-side form button {
+      cursor: pointer;
+      background: rgba(0, 0, 0, 0.2);
+      border: none;
+      border-radius: 12px;
+      width: 25%;
+      padding: 12px;
+      color: var(--white);
+      font-size: 1.2rem;
+    }
+
+    .contact .container .content .right-side form button:active {
+      background: var(--darkgray);
+    }
+
+    footer {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 10vh;
+    }
+
+    footer p {
+      font-size: 1.1rem;
+      color: var(--white);
+    }
+
+    @keyframes orbit {
+      40% {
+        z-index: 1;
+      }
+
+      50% {
+        left: 40em;
+        z-index: -1;
+      }
+
+      99% {
+        z-index: -1;
+      }
+
+      100% {
+        left: -11em;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <header data-aos="fade-down" data-aos-delay="200">
+    <div class="container">
+      <div class="content">
+        <div data-aos="fade-down-right" data-aos-delay="300" class="logo">
+          <img src="https://github.com/aditya-ghosh2992/photo/blob/main/assets/saturn.png?raw=true" alt="logo" />
+          <a href="">CosmoSPACE</a>
+        </div>
+
+        <div class="extra-nav">
+          <button data-aos="fade-down" data-aos-delay="400">
+            Let's Explore!
+            <i data-feather="aperture" class="icon"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <a href="#" class="to-top"><i data-feather="chevron-up"></i></a>
+
+  <section class="hero">
+    <div class="container">
+      <div class="content">
+        <div class="text">
+          <h1 data-aos="fade-up" data-aos-delay="200">
+            Unveiling the Future of Space
+          </h1>
+          <p data-aos="fade-up" data-aos-delay="300">
+            Venture into the <span>boundless expanse</span> of the cosmos as
+            we push the limits of discovery, redefining the
+            <span>frontiers of space</span> exploration and
+            <span>unleashing innovations</span> that will transform our
+            journey among the stars.
+          </p>
+          <a href="#" data-aos="fade-up" data-aos-delay="400"> Learn More </a>
+        </div>
+
+        <div class="moon"></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="why-us">
+    <div class="container">
+      <div class="content">
+        <div class="title" data-aos="fade-up" data-aos-delay="400">
+          <h2>WHY CHOOSE US</h2>
+          <h1>Explore the Cosmos Like Never Before</h1>
+          <p>
+            Novaspace connects you to the mysteries of the universe with
+            cutting-edge technology and engaging content. Whether you're a
+            curious learner or a space enthusiast, we make exploration easy
+            and accessible for everyone.
+          </p>
+        </div>
+
+        <div class="reason">
+          <div class="card" data-aos="fade-up" data-aos-delay="400">
+            <div class="icon">🚀</div>
+            <div class="desc">
+              <h3>Immersive Experience</h3>
+              <p>
+                Dive into the wonders of space with visually captivating and
+                interactive resources, from planets to galaxies.
+              </p>
+            </div>
+            <hr />
+          </div>
+          <div class="card" data-aos="fade-up" data-aos-delay="600">
+            <div class="icon">🔭</div>
+            <div class="desc">
+              <h3>Reliable Insights</h3>
+              <p>
+                Powered by the latest research and advanced tools, we provide
+                accurate and up-to-date information about the cosmos.
+              </p>
+            </div>
+            <hr />
+          </div>
+          <div class="card" data-aos="fade-up" data-aos-delay="800">
+            <div class="icon">✨</div>
+            <div class="desc">
+              <h3>Space for Everyone</h3>
+              <p>
+                Our platform is designed for all levels—beginner or expert—so
+                you can explore the universe at your own pace.
+              </p>
+            </div>
+            <hr />
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="about">
+    <div class="container">
+      <div class="content">
+        <div class="text-action">
+          <h2 data-aos="fade-left" data-aos-delay="200">ABOUT US</h2>
+          <h1 data-aos="fade-left" data-aos-delay="400">
+            EXPLORE MYSTERIOUS SPACE WITH US
+          </h1>
+          <p data-aos="fade-left" data-aos-delay="600">
+            Welcome to Novaspace, the home of space lovers. We are committed
+            to delivering quality content that opens doors to the beauty of
+            the universe. Through technology and science, we connect you to
+            the stars, planets and mysteries of the galaxy yet to be revealed.
+          </p>
+          <a href="" data-aos="fade-left" data-aos-delay="800">Learn More <i data-feather="arrow-up-right"
+              class="icon"></i></a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="status">
+    <div class="container">
+      <div class="content">
+        <div class="title" data-aos="fade-down" data-aos-delay="400">
+          <h2>OUR HOME</h2>
+          <p>
+            A jeweled blue planet orbiting the Sun, home to millions of
+            species, including humans.
+          </p>
+        </div>
+
+        <div class="planet">
+          <div class="earth">
+            <div class="moon">
+              <div class="moon-desc">
+                <p>Moon</p>
+                <hr />
+              </div>
+            </div>
+          </div>
+
+          <div class="desc desc-1">
+            <p class="name" data-aos="fade-right" data-aos-delay="200">
+              Surface Area
+            </p>
+            <hr data-aos="fade-right" data-aos-delay="200" />
+            <p class="value" data-aos="fade-right" data-aos-delay="200">
+              510.1 million km²
+            </p>
+          </div>
+          <div class="desc desc-2">
+            <p class="name" data-aos="fade-right" data-aos-delay="400">
+              Temperature
+            </p>
+            <hr data-aos="fade-right" data-aos-delay="400" />
+            <p class="value" data-aos="fade-right" data-aos-delay="400">
+              Average of 14°C, ranging from -88°C to 58°C
+            </p>
+          </div>
+          <div class="desc desc-3">
+            <p class="name" data-aos="fade-right" data-aos-delay="600">Age</p>
+            <hr data-aos="fade-right" data-aos-delay="600" />
+            <p class="value" data-aos="fade-right" data-aos-delay="600">
+              4.54 billion years
+            </p>
+          </div>
+          <div class="desc desc-4">
+            <p class="name" data-aos="fade-left" data-aos-delay="200">
+              Gravity
+            </p>
+            <hr data-aos="fade-left" data-aos-delay="200" />
+            <p class="value" data-aos="fade-left" data-aos-delay="200">
+              9.8 m/s²
+            </p>
+          </div>
+          <div class="desc desc-5">
+            <p class="name" data-aos="fade-left" data-aos-delay="400">Mass</p>
+            <hr data-aos="fade-left" data-aos-delay="400" />
+            <p class="value" data-aos="fade-left" data-aos-delay="400">
+              5.97 * 10^24 kg
+            </p>
+          </div>
+          <div class="desc desc-6">
+            <p class="name" data-aos="fade-left" data-aos-delay="600">
+              Oxygen Level
+            </p>
+            <hr data-aos="fade-left" data-aos-delay="600" />
+            <p class="value" data-aos="fade-left" data-aos-delay="600">
+              21% (in the atmosphere)
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="destination">
+    <div class="container">
+      <div class="content">
+        <div class="title" data-aos="fade-right" data-aos-delay="200">
+          <h1>MOST POPULAR DESTINATION</h1>
+          <p>
+            Explore the fascinating satellites and planets that our users
+            adore visiting, and take your time to choose the ideal getaway
+            destination that's perfect for you.
+          </p>
+          <a href="#">See More
+            <i data-feather="arrow-right" size="12px" class="icon"></i></a>
+        </div>
+        <div class="items saturn" data-aos="fade-left" data-aos-delay="400">
+          <a href="#">Read More
+            <i data-feather="arrow-right" size="12px" class="icon"></i></a>
+          <h1>SATURN RINGS</h1>
+        </div>
+        <div class="items moon" data-aos="fade-right" data-aos-delay="200">
+          <a href="#">Read More
+            <i data-feather="arrow-right" size="12px" class="icon"></i></a>
+          <h1>MOON</h1>
+        </div>
+        <div class="items eyropa" data-aos="fade-left" data-aos-delay="400">
+          <a href="#">Read More
+            <i data-feather="arrow-right" size="12px" class="icon"></i></a>
+          <h1>EYROPA</h1>
+        </div>
+        <div class="items mercury" data-aos="fade-left" data-aos-delay="600">
+          <a href="#">Read More
+            <i data-feather="arrow-right" size="12px" class="icon"></i></a>
+          <h1>MERCURY</h1>
+        </div>
+        <div class="items blackhole" data-aos="fade-up-right" data-aos-delay="200">
+          <a href="#">Read More
+            <i data-feather="arrow-right" size="12px" class="icon"></i></a>
+          <h1>BLACK HOLE</h1>
+        </div>
+        <div class="items titan" data-aos="fade-left" data-aos-delay="200">
+          <a href="#">Read More
+            <i data-feather="arrow-right" size="12px" class="icon"></i></a>
+          <h1>TITAN</h1>
+        </div>
+        <div class="items neptune" data-aos="fade-left" data-aos-delay="400">
+          <a href="#">Read More
+            <i data-feather="arrow-right" size="12px" class="icon"></i></a>
+          <h1>NEPTUNE</h1>
+        </div>
+        <div class="items mars" data-aos="fade-left" data-aos-delay="400">
+          <a href="#">Read More
+            <i data-feather="arrow-right" size="12px" class="icon"></i></a>
+          <h1>MARS</h1>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="contact">
+    <div class="container">
+      <div class="content">
+        <div class="left-side">
+          <h1 data-aos="fade-right" data-aos-delay="200">Get in Touch, and Our Expert Will Reach Out to You</h1>
+          <p data-aos="fade-right" data-aos-delay="300">
+            Our team is always available and ready to assist you with any
+            inquiries. Thank you for your patience and for trusting our
+            dedicated specialists to support you.
+          </p>
+        </div>
+        <div class="right-side">
+          <form data-aos="fade-left" data-aos-delay="400">
+            <h1>CONTACT US</h1>
+            <div class="row-1">
+              <input type="text" placeholder="First Name" />
+              <input type="text" placeholder="Last Name" />
+            </div>
+            <div class="row-1">
+              <input type="email" placeholder="Email" />
+              <input type="text" placeholder="Phone Number" />
+            </div>
+            <textarea placeholder="Message"></textarea>
+            <div class="remember">
+              <input type="checkbox" />
+              <p>
+                By clicking on the "Submit" button, I accept the terms of
+                processing of my personal data
+              </p>
+            </div>
+            <button>Submit</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <p>All Rights Reserved • Copyright Cosmospace • Bulid with ❤️ by Aditya Ghosh • 2024 </p>
+  </footer>
+
+  <!-- AOS -->
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  <script>
+    AOS.init();
+    feather.replace();
+  </script>
+  <script>
+    let lastScrollTop = 0;
+    const header = document.querySelector("header");
+    const toTop = document.querySelector(".to-top");
+    const heroSection = document.querySelector(".hero");
+
+    window.addEventListener("scroll", () => {
+      const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+      const heroSectionOffsetTop = heroSection.offsetTop;
+
+      if (scrollTop > heroSectionOffsetTop) {
+        toTop.classList.add("active");
+      } else {
+        toTop.classList.remove("active");
+      }
+
+      if (scrollTop > lastScrollTop) {
+        header.classList.add("hidden");
+      } else {
+        header.classList.remove("hidden");
+      }
+
+      lastScrollTop = scrollTop;
+    });
+
+  </script>
+
+</body>
+
+</html>
   `, {
     headers: {
       'Content-Type': 'text/html; charset=utf-8'
