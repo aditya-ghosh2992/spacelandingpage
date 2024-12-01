@@ -1,0 +1,42 @@
+{
+  "name": "spacelandingpage",
+  "bucket": "",
+  "preset": "javascript",
+  "env": "production",
+  "prefix": "20241201164319",
+  "not-first-run": true,
+  "function": {
+    "id": 33100,
+    "name": "__DEFAULT__",
+    "file": ".edge/worker.js",
+    "args": "azion/args.json",
+    "instance-id": 31835,
+    "instance-name": "__DEFAULT__",
+    "cache-id": 191449
+  },
+  "application": {
+    "id": 1733071250,
+    "name": "__DEFAULT__"
+  },
+  "domain": {
+    "id": 1733076972,
+    "name": "spacelandingpage",
+    "domain_name": "wesm5zheo0.map.azionedge.net",
+    "url": "https://wesm5zheo0.map.azionedge.net"
+  },
+  "rt-purge": {
+    "purge_on_publish": true
+  },
+  "origin": [],
+  "rules-engine": {
+    "created": false,
+    "rules": [
+      {
+        "id": 329088,
+        "name": "Execute Edge Function",
+        "phase": "request"
+      }
+    ]
+  },
+  "cache-settings": []
+}
